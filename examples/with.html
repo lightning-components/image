@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+        <title>Example Usage: lightning-image</title>
+        <script src="../lightning-image.js" async></script>
+        <script src="./timing.js" async></script>
+        <style>
+            img, lightning-image {
+                display: block;
+                margin: 5px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>With lightning-image</h1>
+        <p>DOMComplete: <span class="dom-complete-time">N/A</span></p>
+
+        <lightning-image src="https://placehold.it/399x399" width="399" height="399" alt=""></lightning-image>
+
+        <!-- Generate 100 images to enable scrolling down the page & showcase the lazy loading functionality -->
+        <script>
+            for (let i = 400; i < 500; i++) {
+                const img = document.createElement('lightning-image');
+                img.width = i;
+                img.height = i;
+                img.src = `https://placehold.it/${i}`;
+
+                document.body.appendChild(img);
+            }
+        </script>
+    </body>
+</html>
