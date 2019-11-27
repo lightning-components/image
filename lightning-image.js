@@ -9,9 +9,13 @@
     template.innerHTML = `
 
 <style>
+.lightning-image {
+    display: inline-block;
+}
 </style>
 
-<img class="lightning-image" loading="lazy" />
+<div class="lightning-image">
+</div>
 
 `;
 
@@ -54,19 +58,64 @@
                 this.setAttribute('height', this.height);
             }
 
+            this.img = this.getImageToBeInserted();
+
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(this.template());
+        }
+
+        connectedCallback() {
+            if (this.supportsNativeLazyLoading()) {
+                this.img.loading = 'lazy';
+                this.insertImage();
+
+                return;
+            }
+
+            // no native lazy loading for the browser
+            this.setupObserver();
         }
 
         template() {
             const cloned = template.content.cloneNode(true);
 
-            const image = cloned.querySelector('.lightning-image')
-            image.width = this.getAttribute('width');
-            image.height = this.getAttribute('height');
-            image.src = this.getAttribute('src');
+            const container = cloned.querySelector('.lightning-image')
+            const width = this.getAttribute('width') || 0;
+            const height = this.getAttribute('height') || 0;
+            container.style.width = width + 'px';
+            container.style.height = height + 'px';
 
             return cloned;
+        }
+
+        getImageToBeInserted() {
+            const template = document.createElement('template');
+            template.innerHTML = replaceTag(this);
+            const img = template.content.firstChild;
+
+            return img;
+        }
+
+        supportsNativeLazyLoading() {
+            return 'loading' in HTMLImageElement.prototype;
+        }
+
+        setupObserver() {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.insertImage();
+                        observer.unobserve(this);
+                    }
+                })
+            }, { rootMargin: '0px' });
+
+            observer.observe(this);
+        }
+
+        insertImage() {
+            const container = this.shadowRoot.querySelector('.lightning-image');
+            container.appendChild(this.img);
         }
     }
 
