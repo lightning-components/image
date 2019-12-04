@@ -1,6 +1,6 @@
 {
   "name": "@lightning-components/image",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lazy loads images to improve page speed",
   "main": "lightning-image.js",
   "keywords": [
