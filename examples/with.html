@@ -17,15 +17,15 @@
         <h1>With lightning-image</h1>
         <p>DOMComplete: <span class="dom-complete-time">N/A</span></p>
 
-        <lightning-image src="https://placehold.it/399x399" width="399" height="399" alt="399 Placeholder"></lightning-image>
+        <lightning-image src="https://placehold.it/399x399" alt="Placeholder image"></lightning-image>
 
         <!-- Generate 100 images to enable scrolling down the page & showcase the lazy loading functionality -->
         <script>
             for (let i = 400; i < 500; i++) {
                 const img = document.createElement('lightning-image');
-                img.width = i;
-                img.height = i;
-                img.src = `https://placehold.it/${i}`;
+                img.setAttribute('width', `${i}`);
+                img.setAttribute('height', `${i}`);
+                img.setAttribute('src', `https://placehold.it/${i}`);
 
                 document.body.appendChild(img);
             }
