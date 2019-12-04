@@ -47,10 +47,6 @@
             this.appendChild(this.img);
         }
 
-        get src() {
-            return this.getAttribute('src');
-        }
-
         /**
          * Ensure src property is reflected to an attribute.
          * https://developers.google.com/web/fundamentals/web-components/customelements#properties_and_attributes
@@ -61,6 +57,10 @@
             }
 
             this.setAttribute('src', value);
+        }
+
+        get src() {
+            return this.getAttribute('src');
         }
 
         connectedCallback() {
