@@ -9,15 +9,17 @@
     template.innerHTML = `
 
 <style>
-:host(lightning-image) {
+:host {
     display: inline; /* if display: contents is not supported, then use the same default display style as an img tag */
     display: contents; /* treat the lightning-image container as if it isn't there */
 }
 </style>
 
+<!-- We want the img element to live outside of the shadowDOM so that it is fully query-able, style-able, etc as if it wasn't
+ inside the shadowDOM at all. The <slot> element allows us to accomplish this. -->
+<slot></slot>
+
 `;
-
-
 
 
     /**
@@ -38,6 +40,11 @@
             // https://developers.google.com/web/fundamentals/web-components/best-practices#create-your-shadow-root-in-the-constructor
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(this.template());
+
+            // store the img, so that we can directly reference it in the future
+            this.img = this.createImg();
+            // insert the img element directly into the light DOM, and have it project to the shadowDOM via the <slot> element.
+            this.appendChild(this.img);
         }
 
         get src() {
@@ -69,6 +76,10 @@
             // https://developers.google.com/web/fundamentals/web-components/customelements#shadowdom
             const cloned = template.content.cloneNode(true);
 
+            return cloned;
+        }
+
+        createImg() {
             // we want to create an img tag element that is the same as the lightning-image
             // component, except it has a src that will not cause any additional network requests
             const tpl = document.createElement('template');
@@ -85,10 +96,7 @@
                 imgTag.src = LightningImage.PIXEL_BASE_64;
             }
 
-            // add the dynamic img into our static template
-            cloned.appendChild(imgTag);
-
-            return cloned;
+            return imgTag;
         }
 
         supportsNativeLazyLoading() {
@@ -99,22 +107,16 @@
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        this.insertOriginalImage();
+                        // here we are replacing the pixel image with the original image
+                        this.img.src = this.src;
+
                         observer.unobserve(this);
                     }
                 })
             }, { rootMargin: '0px' });
 
             // observe our pixel image
-            observer.observe(this.getImgElement());
-        }
-
-        getImgElement() {
-            return this.shadowRoot.querySelector('img');
-        }
-
-        insertOriginalImage() {
-            this.getImgElement().src = this.src;
+            observer.observe(this.img);
         }
     }
 
