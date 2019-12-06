@@ -31,7 +31,7 @@ As with all lightning-components, you simply replace the original tag with it's 
 
 So if this was the original `img` tag on your page:
 ```html
-<img src="https://placehold.it/400x400" alt="Placeholder Image" >
+<img src="https://placehold.it/400x400" alt="Placeholder Image">
 ```
 You would rewrite that as:
 ```html

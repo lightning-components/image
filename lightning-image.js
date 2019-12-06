@@ -63,7 +63,36 @@
             return this.getAttribute('src');
         }
 
+        set width(value) {
+            if (!value) {
+                return this.removeAttribute('width');
+            }
+
+            this.setAttribute('width', value);
+        }
+
+        get width() {
+            return this.getAttribute('src');
+        }
+
+        set height(value) {
+            if (!value) {
+                return this.removeAttribute('height');
+            }
+
+            this.setAttribute('height', value);
+        }
+
+        get height() {
+            return this.getAttribute('src');
+        }
+
         connectedCallback() {
+            // https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
+            this._upgradeProperty('src');
+            this._upgradeProperty('width');
+            this._upgradeProperty('height');
+
             // if the browser supports native lazy loading (only Chrome at time of writing), then
             // simply use that instead of using our own lazy loading implementation.
             if (!this.supportsNativeLazyLoading()) {
@@ -117,6 +146,14 @@
 
             // observe our pixel image
             observer.observe(this.img);
+        }
+
+        _upgradeProperty(prop) {
+            if (this.hasOwnProperty(prop)) {
+                let value = this[prop];
+                delete this[prop];
+                this[prop] = value;
+            }
         }
     }
 
