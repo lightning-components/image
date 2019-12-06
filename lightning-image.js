@@ -40,11 +40,6 @@
             // https://developers.google.com/web/fundamentals/web-components/best-practices#create-your-shadow-root-in-the-constructor
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(this.template());
-
-            // store the img, so that we can directly reference it in the future
-            this.img = this.createImg();
-            // insert the img element directly into the light DOM, and have it project to the shadowDOM via the <slot> element.
-            this.appendChild(this.img);
         }
 
         /**
@@ -92,6 +87,11 @@
             this._upgradeProperty('src');
             this._upgradeProperty('width');
             this._upgradeProperty('height');
+
+            // store the img, so that we can directly reference it in the future
+            this.img = this.createImg();
+            // insert the img element directly into the light DOM, and have it project to the shadowDOM via the <slot> element.
+            this.appendChild(this.img);
 
             // if the browser supports native lazy loading (only Chrome at time of writing), then
             // simply use that instead of using our own lazy loading implementation.
