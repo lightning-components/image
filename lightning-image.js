@@ -32,7 +32,7 @@
         /**
          * This is a simple 1x1 white pixel encoded as base64.
          */
-        static PIXEL_BASE_64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQIHWP4DwABAQEANl9ngAAAAABJRU5ErkJggg==';
+        static get PIXEL_BASE_64() { return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVQIHWP4DwABAQEANl9ngAAAAABJRU5ErkJggg==' };
 
         constructor() {
             super();
