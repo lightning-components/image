@@ -42,51 +42,12 @@
             this.shadowRoot.appendChild(this.template());
         }
 
-        /**
-         * Ensure src property is reflected to an attribute.
-         * https://developers.google.com/web/fundamentals/web-components/customelements#properties_and_attributes
-         */
-        set src(value) {
-            if (!value) {
-                return this.removeAttribute('src');
-            }
-
-            this.setAttribute('src', value);
-        }
-
-        get src() {
-            return this.getAttribute('src');
-        }
-
-        set width(value) {
-            if (!value) {
-                return this.removeAttribute('width');
-            }
-
-            this.setAttribute('width', value);
-        }
-
-        get width() {
-            return this.getAttribute('src');
-        }
-
-        set height(value) {
-            if (!value) {
-                return this.removeAttribute('height');
-            }
-
-            this.setAttribute('height', value);
-        }
-
-        get height() {
-            return this.getAttribute('src');
-        }
-
         connectedCallback() {
             // https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
             this._upgradeProperty('src');
             this._upgradeProperty('width');
             this._upgradeProperty('height');
+            this._upgradeProperty('disableNativeLazyloading');
 
             // store the img, so that we can directly reference it in the future
             this.img = this.createImg();
@@ -129,7 +90,7 @@
         }
 
         supportsNativeLazyLoading() {
-            return 'loading' in HTMLImageElement.prototype;
+            return !this.disableNativeLazyloading && 'loading' in HTMLImageElement.prototype;
         }
 
         setupObserver() {
@@ -154,6 +115,58 @@
                 delete this[prop];
                 this[prop] = value;
             }
+        }
+
+        /**
+         * Ensure src property is reflected to an attribute.
+         * https://developers.google.com/web/fundamentals/web-components/customelements#properties_and_attributes
+         */
+        set src(value) {
+            if (!value) {
+                return this.removeAttribute('src');
+            }
+
+            this.setAttribute('src', value);
+        }
+
+        get src() {
+            return this.getAttribute('src');
+        }
+
+        set width(value) {
+            if (!value) {
+                return this.removeAttribute('width');
+            }
+
+            this.setAttribute('width', value);
+        }
+
+        get width() {
+            return this.getAttribute('src');
+        }
+
+        set height(value) {
+            if (!value) {
+                return this.removeAttribute('height');
+            }
+
+            this.setAttribute('height', value);
+        }
+
+        get height() {
+            return this.getAttribute('src');
+        }
+
+        set disableNativeLazyloading(value) {
+            if (!value) {
+                return this.removeAttribute('disable-native-lazyloading');
+            }
+
+            this.setAttribute('disable-native-lazyloading', value);
+        }
+
+        get disableNativeLazyloading() {
+            return this.hasAttribute('disable-native-lazyloading') && this.getAttribute('disable-native-lazyloading') !== 'false';
         }
     }
 
